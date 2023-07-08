@@ -31,3 +31,12 @@ export interface IPlayer{
   errorText: string;
   ships?: IShip[];
 }
+
+export interface IParamsPlayer extends IPlayer {
+  getInfo: () => {
+    name: string;
+    index: string;
+    error: boolean;
+    errorText: string;
+};
+}

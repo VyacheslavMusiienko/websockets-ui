@@ -1,5 +1,5 @@
 import WebSocket, { WebSocketServer } from 'ws';
-import { IMessage, IMessageData, IPlayer } from '../type';
+import { IMessage, IMessageData, IParamsPlayer, IPlayer } from '../type';
 import { createPlayer } from './player';
 
 const roomConnection = new Set<IPlayer>();
@@ -17,12 +17,12 @@ export const webSocket = async (port: number) => {
       switch (messageType) {
         case 'reg':
           const messageData: IMessageData = JSON.parse(messageObject.data);
-          const player: IPlayer = createPlayer(messageData.name, messageData.password, ws);
+          const player: IParamsPlayer = createPlayer(messageData.name, messageData.password, ws);
           roomConnection.add(player);
 
           const res = JSON.stringify({
             type: "reg",
-            data: JSON.stringify(player),
+            data: JSON.stringify(player.getInfo()),
             id: 0,
           });
           ws.send(res);
@@ -32,8 +32,6 @@ export const webSocket = async (port: number) => {
           break;
       }
       console.log(messageObject);
-
-      ws.send(messageString);
     });
   });
 
